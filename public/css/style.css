@@ -1,0 +1,237 @@
+body {
+    font-family: Arial;
+    margin: 40px;
+}
+
+h1 {
+    color: steelblue;
+}
+
+.notes-header {
+    display: flex;
+    justify-content: space-between;  
+    align-items: center;             
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.reg-log-btn {
+    text-decoration: none;
+    padding: 10px 16px;
+    background-color: steelblue;
+    color: white;
+    border: transparent;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.reg-log-btn:hover {
+    background-color: rgb(3, 60, 106);;
+}
+
+.logout-btn {
+    padding: 10px 16px;
+    background-color: #bc0606;
+    color: white;
+    border: transparent;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.logout-btn:hover {
+    background-color: #7b0505;
+}
+
+.sort-dropdown {
+    position: relative;
+}
+
+.sort-btn {
+    padding: 10px 16px;
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.sort-btn:hover {
+    background-color: #f1f3f5;
+}
+
+.sort-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    min-width: 160px;
+    z-index: 100;
+    display: none;
+    margin-top: 4px;
+}
+
+.sort-menu a {
+    display: block;
+    padding: 10px 16px;
+    text-decoration: none;
+    color: #333;
+}
+
+.sort-menu a:hover {
+    background-color: #f8f9fa;
+}
+
+.create-btn {
+    padding: 10px 20px;
+    background-color: steelblue;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+}
+
+.note {
+    width: 20%;
+    padding: 20px;
+    border-radius: 5px;
+    border-color: rgb(32, 31, 31);       
+    border-width: 1px;
+    border-style: solid;
+}
+
+.note h2 {
+    color: steelblue
+}
+
+.note small {
+    color: rgb(32, 31, 31);
+}
+
+.note p {
+    color: rgb(32, 31, 31);
+}
+
+container {
+    display: flex;
+    flex-direction:row;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+input[type="text"],
+textarea {
+  width: 70%;                  
+  padding: 0.75rem 1rem;         
+  border: 2px solid #ccc;     
+  border-radius: 4px;          
+  font-size: 1rem;             
+  font-family: inherit;        
+  line-height: 1.4;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  resize: vertical;            
+}
+input[type="submit"] {
+  width: 30%;                 
+  padding: 0.75rem 1rem;      
+  border: 2px solid #ccc;    
+  border-radius: 4px;            
+  font-size: 1rem;              
+  font-family: inherit;         
+  line-height: 1.4;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  resize: vertical;              
+}
+
+.tag-menu {
+    width: 40%;
+    display: flex;
+    justify-content: space-between;  
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.tags-list {
+    padding: 25px;
+}
+
+.tags-list div {
+    width: 190px;
+    padding: 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.tags-list div p {
+    color: rgb(76, 82, 87);
+}
+
+.tags-list div p:hover {
+    color: rgb(0, 0, 0);
+}
+
+.delBtn {
+    height: fit-content;
+    padding: 3px 6px;
+    border: none;
+    border-radius: 2px;
+    background-color: rgb(205, 0, 0);
+    color: white;
+}
+
+.delBtn:hover {
+    background-color: rgb(118, 0, 0);
+}
+
+.editBtn {
+    height: fit-content;
+    padding: 3px 6px;
+    border: none;
+    border-radius: 2px;
+    background-color: steelblue;
+    color: white;
+}
+
+.editBtn:hover {
+    background-color: rgb(50, 94, 130);
+}
+
+.selected-tags {
+    padding: 25px;
+}
+
+.selected-tags p {
+    padding: 4px;
+    color: steelblue;
+    font-style: italic;
+}
+
+.selected-tags p:hover {
+    color: rgb(50, 94, 130);
+}
+
+#error-div {
+    color: red;
+    padding: 16px 0px;
+    font-size: 16px;
+}

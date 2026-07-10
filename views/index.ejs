@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Home</title>
+
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+<div class="notes-header">
+    <h1><a href="" style="text-decoration: none; color: steelblue">My Notes</a></h1>
+    <% if(isLoggedIn) { %>
+        <div class="header-actions">
+            <form method="POST" action="/auth/logout"><button class="logout-btn">Logout</button></form>
+        </div>
+    <% } else { %>
+        <div class="header-actions">
+            <a href="/auth/login" class="reg-log-btn">Login</a>
+            <a href="/auth/register" class="reg-log-btn">Register</a>
+        </div>
+    <% } %>
+</div>
+
+<p>A simple notes app.</p>
+
+<% if(isLoggedIn) { %>
+    <a href="/notes">View Notes</a>
+<% } else { %>
+    Sign up to create your first note
+<% } %>
+
+</body>
+
+</html>

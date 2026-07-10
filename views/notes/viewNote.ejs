@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Notes</title>
+        <link rel="stylesheet" href="/css/style.css">
+    </head>
+    <body>
+        <div class="notes-header">
+            <h1><a href="/" style="text-decoration: none; color: steelblue">My Notes</a></h1>
+            
+            <div class="header-actions">
+                <a href="/notes/create" class="create-btn">Create</a>
+                <form method="POST" action="/auth/logout"><button class="logout-btn">Logout</button></form>
+            </div>
+        </div>
+
+        <div class="note" style="width: 75%;">
+            <h2><%= note.title %></h2>
+            <i><small>Created at:</small></i><br>
+            <i><small><%= new Intl.DateTimeFormat('en-US', {
+                month: 'short',
+                day: '2-digit',   
+                year: 'numeric',  
+                hour: '2-digit',  
+                minute: '2-digit',
+                hour12: false
+            }).format(note.created_at) %></small></i><br><br>
+            <i><small>Last Modified:</small></i><br>
+            <i><small><%= new Intl.DateTimeFormat('en-US', {
+                month: 'short',
+                day: '2-digit',   
+                year: 'numeric',  
+                hour: '2-digit',  
+                minute: '2-digit',
+                hour12: false
+            }).format(note.updated_at) %></small></i><br><br>
+            
+            <i><small style="color:steelblue">
+                <%= note.tags.map(t => t.tag.name).join(', ') %>
+            </small></i>
+            
+            <p style="white-space: pre-wrap;"><%= note.note %></p>
+
+            <button onclick="window.location.href='/notes/edit/<%= note.id %>'" class="editBtn">Edit</button><br><br>
+            <form method="POST", action="/notes/delete/<%=note.id%>">
+                <button type="submit" class="delBtn">Delete</button>
+            </form>
+        </div>
+
+    </body>
+</html>

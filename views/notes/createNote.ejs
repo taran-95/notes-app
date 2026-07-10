@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Create</title>
+        <link rel="stylesheet" href="/css/style.css">
+    </head>
+    <body>
+         <div class="notes-header">
+            <h1><a href="/" style="text-decoration: none; color: steelblue">My Notes</a></h1>
+
+            <div class="header-actions">
+                <form method="POST" action="/auth/logout"><button class="logout-btn">Logout</button></form>
+            </div>
+        </div>
+            <div class="note" style="width: 75%">
+                <form id="form" method="POST" action="/notes">
+                    <input type="text" id="title" name="title" required placeholder="Title"><br><br>
+                    <textarea type="text" id="note" name="note" required placeholder="Note"></textarea><br><br>
+                    <div class="tag-div">
+                        <input type="text" id="tags" placeholder="Tags"><br>
+                        <div class="tag-menu">
+                            <div class="tags-list"></div>
+                            <div class="selected-tags"></div>
+                        </div>
+                    </div>
+                    <input type="submit" value="Create">
+                </form>
+            </div>
+
+            <script>
+                const selectedTags = [];
+                const form = document.getElementById("form");
+                const tagsInput = document.getElementById("tags");
+                const tagsList = document.querySelector(".tags-list");
+                const selectedTagsList = document.querySelector(".selected-tags");
+
+                tagsInput.addEventListener('input', async function(e) {
+                    const input = tagsInput.value;
+                    let tags = []
+                    try {
+                        const response = await fetch(`/tags/search?search=${encodeURIComponent(input)}`);
+
+                        if (!response.ok) {
+                            const error = await response.json();
+                            document.getElementById("error-div").textContent = error.message;
+                        }
+
+                        tags = await response.json();
+                    } catch (err) {
+                        console.error(err);
+                    }
+
+                    tagsList.innerHTML = "";
+
+                    //NEW TAG OPTION
+                    if(input.trim() && !tags.some(t => t.name === input)) {
+                        const p = document.createElement("p");
+                        p.textContent = `Create a new tag ${input}`;
+                        p.style.cursor = "pointer";
+                        p.title = "Click to create new tag";
+                        p.addEventListener("click", async function(e) {
+                            try {
+                                const response = await fetch(`/tags/${input}`, {
+                                    method: "POST",
+                                    headers: {
+                                        "Content-Type": "application/json"
+                                    }
+                                });
+
+                                if (!response.ok) {
+                                    const error = await response.json();
+                                    document.getElementById("error-div").textContent = error;
+                                }
+
+                                const new_tag = await response.json();
+                                selectedTags.push(new_tag);
+                                updateSelectedTagsList();
+                                p.remove();
+                            } catch (error) {
+                                console.log(error);
+                            }
+                        });
+                        tagsList.append(p);
+                    }
+
+                    //Display Search Results
+                    tags.forEach(tag => {
+                        if(selectedTags.some(t => Number(t.id) === Number(tag.id))) {   
+                            return;
+                        }   
+                        createTagListElement(tag);
+                    });
+                });
+
+                function updateSelectedTagsList() {
+                    //TODO what if selectedTagsList.empty()
+                    selectedTagsList.innerHTML = "";
+
+                    selectedTags.forEach(tag => {
+                        createSelectedTagListElement(tag);
+                    });
+                };
+
+                form.addEventListener("submit", async function(e) {
+                    e.preventDefault();
+                    
+                    const formData = new FormData(form);
+
+                    const tagIds = selectedTags?selectedTags.map(t => Number(t.id)):undefined;
+
+                    const body = {
+                        title: formData.get("title"),
+                        note: formData.get("note"),
+                        tags: tagIds
+                    };
+
+                    const response = await fetch("/notes", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify(body)
+                    });
+                    
+                    if (!response.ok) {
+                        const error = await response.json();
+                        document.getElementById("error-div").textContent = error.message;
+                    }
+
+                    window.location.href = "/notes";
+                });
+
+                function createTagListElement(tag) {
+                    const div = document.createElement("div");
+                    const p = document.createElement("p");
+                    p.textContent = tag.name;
+                    p.style.cursor = "pointer";
+                    p.title = "Click to Add";
+                    p.addEventListener("click", () => {
+                        selectedTags.push(tag);
+                        updateSelectedTagsList();
+                        div.remove();
+                    });
+                    
+                    //Add delete btn
+                    const delBtn = document.createElement("button");
+                    delBtn.textContent = "Delete";
+                    delBtn.style.cursor = "pointer";
+                    delBtn.className = "delBtn";
+                    delBtn.addEventListener("click", async function(e) {
+                        e.preventDefault();
+                        if(sendDeleteTagReq(tag.id)) {
+                            div.remove();
+                        }
+                    });
+                    
+                    //Add edit btn
+                    const editBtn = document.createElement("button");
+                    editBtn.textContent = "Edit";
+                    editBtn.style.cursor = "pointer";
+                    editBtn.className = "editBtn";
+                    editBtn.addEventListener("click", async function(e) {
+                        e.preventDefault();
+                        const input = document.createElement("input");
+                        input.type = 'text';
+                        input.value = p.textContent;
+                        
+                        p.replaceWith(input);
+                        
+                        input.focus();
+                        input.select();
+
+                        input.addEventListener('keydown', async function(e) {
+                            if(e.key === "Enter") {
+                                e.preventDefault();
+                                tag.name = await sendUpdateTagReq(tag.id, input.value);
+                                input.replaceWith(p);
+                                p.textContent = tag.name;
+                                input.remove();
+                            }
+                        });
+
+                    });
+
+                    div.appendChild(p);
+                    div.appendChild(editBtn);
+                    div.appendChild(delBtn);
+                    tagsList.appendChild(div);
+                }
+
+                function createSelectedTagListElement(tag) {
+                    const p = document.createElement("p");
+                    p.textContent = tag.name;
+                    p.style.cursor = "pointer";
+                    p.title = "Click to Remove";
+
+                    p.addEventListener("click", () => {
+                        createTagListElement(tag);
+                        
+                        let index = selectedTags.indexOf(tag);
+                        if(index !== -1) {
+                            selectedTags.splice(index, 1);
+                        }
+                        updateSelectedTagsList();
+                    });
+                    selectedTagsList.appendChild(p);
+                }
+
+                async function sendUpdateTagReq(id, name) {
+                    try {
+                        const response = await fetch(`/tags/${id}?newName=${encodeURIComponent(name)}`, {method: "PATCH"});
+
+                        if (!response.ok) {
+                            const error = await response.json();
+                            document.getElementById("error-div").textContent = error.message;
+                            return name;
+                        }
+                        
+                        const newTag = await response.json();
+
+                        return newTag.name;
+                    } catch (error) {
+                        document.getElementById("error-div").textContent = "Unable to connect to server.";
+                    }
+                }
+
+                async function sendDeleteTagReq(id) {
+                    try {
+                        const response = await fetch(`/tags/${id}`, {method: "DELETE"});
+                        if (!response.ok) {
+                            const error = await response.json();
+                            document.getElementById("error-div").textContent = error.message;
+                            return false;
+                        }
+                        return true;
+                    } catch (error) {
+                        document.getElementById("error-div").textContent = "Unable to connect to server.";
+                    }
+                }
+
+            </script>
+    </body>
+</html>

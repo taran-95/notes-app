@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Register</title>
+        <link rel="stylesheet" href="/css/style.css">
+    </head>
+    <body>
+        <div class="notes-header">
+            <h1><a href="/" style="text-decoration: none; color: steelblue">My Notes</a></h1>
+            <div class="header-actions">
+                <a href="/auth/login" class="reg-log-btn">Login</a>
+            </div>
+        </div>
+        <div class="note">
+            <form id="register-form" method="POST" action="/auth/register">
+                <input type="email" id="email" name="email" placeholder="Email"><br><br>
+                <input type="password" minlength="6" id="password" name="password" placeholder="Password"><br><br>
+                <div id="error-div"></div>
+                <input type="submit" value="Register">
+            </form>
+        </div>
+
+        <script>
+            const form = document.getElementById("register-form");
+
+            form.addEventListener("submit", async function(e) {
+                e.preventDefault();
+
+                formData = new FormData(form);
+
+                const body = {
+                    email: formData.get("email"),
+                    password: formData.get("password")
+                }
+
+                try {
+                    const response = await fetch("/auth/register", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify(body)
+                    });
+
+                    if(!response.ok) {
+                        const error = await response.json();
+                        document.getElementById("error-div").textContent = error.message;
+                    } else { 
+                        window.location.href = "/notes";
+                    }
+                    
+                } catch {
+                    document.getElementById("error-div").textContent = "Unable to connect to server.";
+                }
+            });
+        </script>
+    </body>
+</html>
