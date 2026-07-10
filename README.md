@@ -28,6 +28,14 @@ The project implements JWT authentication without Passport, allowing users to re
 
 ## Getting Started
 
+## Prerequisites
+Before running the application, make sure you have installed:
+- Node.js
+- npm
+- PostgreSQL
+
+You'll also need to create a PostgreSQL database.
+
 ### Clone the repository
 
 ```bash
@@ -45,7 +53,11 @@ npm install
 
 ### Configure environment variables
 
-Rename `.env.example` to `.env` and update the database connection string and JWT secret.
+Rename `.env.example` to `.env` and update the following variables: 
+```env
+DATABASE_URL="postgresql://username:password@localhost:5432/notes_app"
+JWT_SECRET="your-secret-key"
+```
 
 
 ### Run Prisma migrations
