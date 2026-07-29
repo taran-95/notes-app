@@ -60,6 +60,13 @@ JWT_SECRET="your-secret-key"
 ```
 
 
+### Generate Prisma Client
+
+```bash
+npx prisma generate
+```
+
+
 ### Run Prisma migrations
 
 ```bash
@@ -72,9 +79,27 @@ npx prisma migrate dev
 ```bash
 npm run start:dev
 ```
-
+The application will be available at http://localhost:3000
 
 ---
+
+## Running with Docker
+
+### Build the Docker image
+```bash
+docker compose build
+```
+
+### Start the application
+```bash
+docker compose up -d
+```
+
+### Apply Database migrations
+```bash
+docker compose exec api npx prisma migrate deploy
+```
+The application will be available at http://localhost:3000.
 
 ## Authentication
 
@@ -121,4 +146,7 @@ This project helped me understand:
 - Cookie-based authentication
 - Authentication vs. authorization
 - Route protection using custom NestJS guards
+- Docker and Docker compose
+- Multi-stage Docker builds
+- Containerizing a full-stack backend application
 
