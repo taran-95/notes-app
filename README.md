@@ -1,28 +1,28 @@
 # Notes App
 
 A simple notes web application built for learning backend development using NestJS, Prisma and PostgreSQL.
-Users can register, log in, and manage their own notes and tags. Authentication is implemented manually using JWTs without Passport.
-The project implements JWT authentication without Passport, allowing users to register, log in, and manage their own notes and tags.
+Users can register, log in, and manage their own notes and tags. Authentication is implemented manually using JWTs and HttpOnly cookies, without relying on Passport.
 
 ---
 
 ## Features
-- User registration
-- User login
-- JWT authentication
+- User registration and login
+- JWT authentication (without Passport)
 - HttpOnly cookie authentication
 - Protected routes using a custom JWT guard
 - Authorization to ensure users can only access their own notes and tags
 - CRUD operations for notes and tags
+- PostgreSQL database with Prisma ORM
 
 
 ## Tech Stack
 - NestJS
-- Prisma
+- Prisma ORM
 - PostgreSQL
-- JWT Authentication (without Passport)
+- JWT
 - bcrypt
 - EJS
+- Docker and Docker compose
 
 ---
 
